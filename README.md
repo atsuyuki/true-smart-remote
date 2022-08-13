@@ -1,24 +1,17 @@
-# RP2040 Template
+# True Smart Remote
 
-## Dependencies
+## What's This?
+大量のボタンに埋め尽くされたTVリモコンからの解放を目指すスマートデバイスです。
 
-```
-rustup target add thumbv6m-none-eabi
-cargo install elf2uf2-rs
-```
-
-## Flash Code
-
-```
-cargo run --release
-```
-
-### Troubleshooting
-
-If you get an error such as:
-
-```
-Error: "Memory segment 0x010000->0x010094 is outside of valid address range for device"
-```
-
-Double check that your `RUSTFLAGS` environment variable, as it will take precedence over the values set in `./cargo/config.toml`.
+## ToDo
+- ハードウェア
+    - []回路を設計する
+    - []基板を設計する
+    - []ケースを作る
+- ソフトウェア
+    - []プログラムを書く
+        - Rust
+        - Arduino
+        - Circuit Python（起動が遅いので使わないことにした）
+    - []ドキュメントを書く（READMEもちゃんと書く）
+- []キット化
