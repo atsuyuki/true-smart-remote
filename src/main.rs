@@ -48,7 +48,7 @@ fn main() -> ! {
 
     let mut pwm_pin = pins.gpio17.into_push_pull_output();
     let mut ir_pin = pins.gpio14.into_push_pull_output();
-    
+
     pwm_pin.set_drive_strength(rp2040_hal::gpio::OutputDriveStrength::TwelveMilliAmps);
     ir_pin.set_drive_strength(rp2040_hal::gpio::OutputDriveStrength::TwelveMilliAmps);
 
@@ -181,6 +181,7 @@ fn main() -> ! {
         1270, 472, 1268, 470, 1266, 472, 396, 474, 396, 470, 1270, 470,
     ];
 
+    let _interval = 200;
     loop {
         if button_1.is_high().ok().unwrap() {
             // amp_input_game
@@ -194,16 +195,50 @@ fn main() -> ! {
                 }
             }
             ir_pin.set_low().unwrap();
-            delay.delay_ms(200);
+            delay.delay_ms(_interval);
         }
         if button_2.is_high().ok().unwrap() {
             // _tv_ch_inc
+            for (i, val) in _tv_ch_inc.iter().enumerate() {
+                if i % 2 == 0 {
+                    ir_pin.set_high().unwrap();
+                    delay.delay_us(*val);
+                } else {
+                    ir_pin.set_low().unwrap();
+                    delay.delay_us(*val);
+                }
+            }
+            ir_pin.set_low().unwrap();
+            delay.delay_ms(_interval);
         }
+
         if button_3.is_high().ok().unwrap() {
             // _tv_ch_dec
+            for (i, val) in _tv_ch_dec.iter().enumerate() {
+                if i % 2 == 0 {
+                    ir_pin.set_high().unwrap();
+                    delay.delay_us(*val);
+                } else {
+                    ir_pin.set_low().unwrap();
+                    delay.delay_us(*val);
+                }
+            }
+            ir_pin.set_low().unwrap();
+            delay.delay_ms(_interval);
         }
         if button_4.is_high().ok().unwrap() {
             // _amp_input_tv
+            for (i, val) in _amp_input_tv.iter().enumerate() {
+                if i % 2 == 0 {
+                    ir_pin.set_high().unwrap();
+                    delay.delay_us(*val);
+                } else {
+                    ir_pin.set_low().unwrap();
+                    delay.delay_us(*val);
+                }
+            }
+            ir_pin.set_low().unwrap();
+            delay.delay_ms(_interval);
         }
         if button_5.is_high().ok().unwrap() {
             // _amp_vol_inc
@@ -217,7 +252,7 @@ fn main() -> ! {
                 }
             }
             ir_pin.set_low().unwrap();
-            delay.delay_ms(200);
+            delay.delay_ms(_interval);
         }
         if button_6.is_high().ok().unwrap() {
             // _amp_vol_dec
@@ -231,7 +266,7 @@ fn main() -> ! {
                 }
             }
             ir_pin.set_low().unwrap();
-            delay.delay_ms(200);
+            delay.delay_ms(_interval);
         }
     }
 }
