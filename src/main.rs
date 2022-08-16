@@ -44,7 +44,8 @@ fn main() -> ! {
     let pins =
         rp2040_hal::gpio::Pins::new(pac.IO_BANK0, pac.PADS_BANK0, sio.gpio_bank0, &mut pac.RESETS);
 
-    // let mut led_pin = pins.gpio25.into_push_pull_output();
+    let mut led_pin = pins.gpio25.into_push_pull_output();
+    let mut power_pin = pins.gpio1.into_push_pull_output();
 
     let mut pwm_pin = pins.gpio17.into_push_pull_output();
     let mut ir_pin = pins.gpio14.into_push_pull_output();
@@ -182,7 +183,11 @@ fn main() -> ! {
     ];
 
     let _interval = 200;
+
     loop {
+        power_pin.set_high().unwrap();
+        led_pin.set_high().unwrap();
+
         if button_1.is_high().ok().unwrap() {
             // amp_input_game
             for (i, val) in _amp_input_game.iter().enumerate() {
@@ -195,7 +200,6 @@ fn main() -> ! {
                 }
             }
             ir_pin.set_low().unwrap();
-            delay.delay_ms(_interval);
         }
         if button_2.is_high().ok().unwrap() {
             // _tv_ch_inc
@@ -209,7 +213,6 @@ fn main() -> ! {
                 }
             }
             ir_pin.set_low().unwrap();
-            delay.delay_ms(_interval);
         }
 
         if button_3.is_high().ok().unwrap() {
@@ -224,7 +227,6 @@ fn main() -> ! {
                 }
             }
             ir_pin.set_low().unwrap();
-            delay.delay_ms(_interval);
         }
         if button_4.is_high().ok().unwrap() {
             // _amp_input_tv
@@ -238,7 +240,6 @@ fn main() -> ! {
                 }
             }
             ir_pin.set_low().unwrap();
-            delay.delay_ms(_interval);
         }
         if button_5.is_high().ok().unwrap() {
             // _amp_vol_inc
@@ -252,7 +253,6 @@ fn main() -> ! {
                 }
             }
             ir_pin.set_low().unwrap();
-            delay.delay_ms(_interval);
         }
         if button_6.is_high().ok().unwrap() {
             // _amp_vol_dec
@@ -266,7 +266,8 @@ fn main() -> ! {
                 }
             }
             ir_pin.set_low().unwrap();
-            delay.delay_ms(_interval);
         }
+        power_pin.set_low().unwrap();
+        delay.delay_ms(_interval);
     }
 }
