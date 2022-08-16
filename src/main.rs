@@ -1,9 +1,13 @@
 #![no_main]
 #![no_std]
 
+use cortex_m::delay::Delay;
 use embedded_hal::digital::v2::{InputPin, OutputPin};
 use panic_reset as _;
-use rp2040_hal::{Clock, Watchdog};
+use rp2040_hal::{
+    gpio::{bank0::Gpio16, Output, Pin, PushPull},
+    Clock, Watchdog,
+};
 
 use embedded_hal::PwmPin;
 use rp2040_hal::pwm::{FreeRunning, Slices};
@@ -48,7 +52,7 @@ fn main() -> ! {
     let mut power_pin = pins.gpio1.into_push_pull_output();
 
     let mut pwm_pin = pins.gpio17.into_push_pull_output();
-    let mut ir_pin = pins.gpio14.into_push_pull_output();
+    let mut ir_pin = pins.gpio16.into_push_pull_output();
 
     pwm_pin.set_drive_strength(rp2040_hal::gpio::OutputDriveStrength::TwelveMilliAmps);
     ir_pin.set_drive_strength(rp2040_hal::gpio::OutputDriveStrength::TwelveMilliAmps);
@@ -188,86 +192,34 @@ fn main() -> ! {
         power_pin.set_high().unwrap();
         led_pin.set_high().unwrap();
 
-        if button_1.is_high().ok().unwrap() {
-            // amp_input_game
-            for (i, val) in _amp_input_game.iter().enumerate() {
-                if i % 2 == 0 {
-                    ir_pin.set_high().unwrap();
-                    delay.delay_us(*val);
-                } else {
-                    ir_pin.set_low().unwrap();
-                    delay.delay_us(*val);
-                }
-            }
-            ir_pin.set_low().unwrap();
-        }
-        if button_2.is_high().ok().unwrap() {
-            // _tv_ch_inc
-            for (i, val) in _tv_ch_inc.iter().enumerate() {
-                if i % 2 == 0 {
-                    ir_pin.set_high().unwrap();
-                    delay.delay_us(*val);
-                } else {
-                    ir_pin.set_low().unwrap();
-                    delay.delay_us(*val);
-                }
-            }
-            ir_pin.set_low().unwrap();
-        }
+        send_if_pressed(&button_1, &_amp_input_game, &mut ir_pin, &mut delay);
+        send_if_pressed(&button_2, &_tv_ch_inc, &mut ir_pin, &mut delay);
+        send_if_pressed(&button_3, &_tv_ch_dec, &mut ir_pin, &mut delay);
+        send_if_pressed(&button_4, &_amp_input_tv, &mut ir_pin, &mut delay);
+        send_if_pressed(&button_5, &_amp_vol_inc, &mut ir_pin, &mut delay);
+        send_if_pressed(&button_6, &_amp_vol_dec, &mut ir_pin, &mut delay);
 
-        if button_3.is_high().ok().unwrap() {
-            // _tv_ch_dec
-            for (i, val) in _tv_ch_dec.iter().enumerate() {
-                if i % 2 == 0 {
-                    ir_pin.set_high().unwrap();
-                    delay.delay_us(*val);
-                } else {
-                    ir_pin.set_low().unwrap();
-                    delay.delay_us(*val);
-                }
-            }
-            ir_pin.set_low().unwrap();
-        }
-        if button_4.is_high().ok().unwrap() {
-            // _amp_input_tv
-            for (i, val) in _amp_input_tv.iter().enumerate() {
-                if i % 2 == 0 {
-                    ir_pin.set_high().unwrap();
-                    delay.delay_us(*val);
-                } else {
-                    ir_pin.set_low().unwrap();
-                    delay.delay_us(*val);
-                }
-            }
-            ir_pin.set_low().unwrap();
-        }
-        if button_5.is_high().ok().unwrap() {
-            // _amp_vol_inc
-            for (i, val) in _amp_vol_inc.iter().enumerate() {
-                if i % 2 == 0 {
-                    ir_pin.set_high().unwrap();
-                    delay.delay_us(*val);
-                } else {
-                    ir_pin.set_low().unwrap();
-                    delay.delay_us(*val);
-                }
-            }
-            ir_pin.set_low().unwrap();
-        }
-        if button_6.is_high().ok().unwrap() {
-            // _amp_vol_dec
-            for (i, val) in _amp_vol_dec.iter().enumerate() {
-                if i % 2 == 0 {
-                    ir_pin.set_high().unwrap();
-                    delay.delay_us(*val);
-                } else {
-                    ir_pin.set_low().unwrap();
-                    delay.delay_us(*val);
-                }
-            }
-            ir_pin.set_low().unwrap();
-        }
         power_pin.set_low().unwrap();
         delay.delay_ms(_interval);
+    }
+}
+
+fn send_if_pressed<PIN: InputPin>(
+    button: &PIN,
+    command: &[u32],
+    ir_pin: &mut Pin<Gpio16, Output<PushPull>>,
+    delay: &mut Delay,
+) {
+    if button.is_high().ok().unwrap() {
+        for (i, val) in command.iter().enumerate() {
+            if i % 2 == 0 {
+                ir_pin.set_high().unwrap();
+                delay.delay_us(*val);
+            } else {
+                ir_pin.set_low().unwrap();
+                delay.delay_us(*val);
+            }
+        }
+        ir_pin.set_low().unwrap();
     }
 }
