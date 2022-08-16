@@ -51,6 +51,10 @@ fn main() -> ! {
     let mut led_pin = pins.gpio25.into_push_pull_output();
     let mut power_pin = pins.gpio1.into_push_pull_output();
 
+    // 諸々やる前に自己保持をかけておく
+    led_pin.set_high().unwrap();
+    power_pin.set_high().unwrap();
+
     let mut pwm_pin = pins.gpio17.into_push_pull_output();
     let mut ir_pin = pins.gpio16.into_push_pull_output();
 
@@ -186,12 +190,7 @@ fn main() -> ! {
         1270, 472, 1268, 470, 1266, 472, 396, 474, 396, 470, 1270, 470,
     ];
 
-    let _interval = 200;
-
     loop {
-        power_pin.set_high().unwrap();
-        led_pin.set_high().unwrap();
-
         send_if_pressed(&button_1, &_amp_input_game, &mut ir_pin, &mut delay);
         send_if_pressed(&button_2, &_tv_ch_inc, &mut ir_pin, &mut delay);
         send_if_pressed(&button_3, &_tv_ch_dec, &mut ir_pin, &mut delay);
@@ -199,8 +198,9 @@ fn main() -> ! {
         send_if_pressed(&button_5, &_amp_vol_inc, &mut ir_pin, &mut delay);
         send_if_pressed(&button_6, &_amp_vol_dec, &mut ir_pin, &mut delay);
 
+        // 自己保持を解除
         power_pin.set_low().unwrap();
-        delay.delay_ms(_interval);
+        delay.delay_ms(200);
     }
 }
 
