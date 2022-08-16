@@ -206,7 +206,7 @@ fn main() -> ! {
 
 fn send_if_pressed<PIN: InputPin>(
     button: &PIN,
-    command: &[u32],
+    command: &[u16],
     ir_pin: &mut Pin<Gpio16, Output<PushPull>>,
     delay: &mut Delay,
 ) {
@@ -214,10 +214,10 @@ fn send_if_pressed<PIN: InputPin>(
         for (i, val) in command.iter().enumerate() {
             if i % 2 == 0 {
                 ir_pin.set_high().unwrap();
-                delay.delay_us(*val);
+                delay.delay_us(*val as u32);
             } else {
                 ir_pin.set_low().unwrap();
-                delay.delay_us(*val);
+                delay.delay_us(*val as u32);
             }
         }
         ir_pin.set_low().unwrap();
