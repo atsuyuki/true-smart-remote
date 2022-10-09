@@ -58,8 +58,8 @@ fn main() -> ! {
     let mut pwm_pin = pins.gpio17.into_push_pull_output();
     let mut ir_pin = pins.gpio16.into_push_pull_output();
 
-//    pwm_pin.set_drive_strength(rp2040_hal::gpio::OutputDriveStrength::TwelveMilliAmps);
-//    ir_pin.set_drive_strength(rp2040_hal::gpio::OutputDriveStrength::TwelveMilliAmps);
+    //    pwm_pin.set_drive_strength(rp2040_hal::gpio::OutputDriveStrength::TwelveMilliAmps);
+    //    ir_pin.set_drive_strength(rp2040_hal::gpio::OutputDriveStrength::TwelveMilliAmps);
 
     let button_4 = pins.gpio11.into_pull_down_input();
     let button_5 = pins.gpio12.into_pull_down_input();
