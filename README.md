@@ -10,9 +10,9 @@
     - [ ] ケースを作る
 - ソフトウェア
     - [ ] プログラムを書く
-        - Rust
-        - Arduino
-        - Circuit Python（起動が遅いので使わないことにした）
+        - [x] Rust
+        - [ ] Arduino
+        - [ ] Circuit Python（起動が遅いので使わないことにした）
     - [ ] ドキュメントを書く（READMEもちゃんと書く）
 - [ ] キット化
 
