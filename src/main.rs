@@ -58,8 +58,8 @@ fn main() -> ! {
     let mut pwm_pin = pins.gpio17.into_push_pull_output();
     let mut ir_pin = pins.gpio16.into_push_pull_output();
 
-    pwm_pin.set_drive_strength(rp2040_hal::gpio::OutputDriveStrength::TwelveMilliAmps);
-    ir_pin.set_drive_strength(rp2040_hal::gpio::OutputDriveStrength::TwelveMilliAmps);
+//    pwm_pin.set_drive_strength(rp2040_hal::gpio::OutputDriveStrength::TwelveMilliAmps);
+//    ir_pin.set_drive_strength(rp2040_hal::gpio::OutputDriveStrength::TwelveMilliAmps);
 
     let button_4 = pins.gpio11.into_pull_down_input();
     let button_5 = pins.gpio12.into_pull_down_input();
@@ -89,7 +89,6 @@ fn main() -> ! {
 
     let _dummy_command = [100, 100];
 
-    // I think it could be written more simply 🤔
     // SONY 1F0C
     let _amp_input_game = [
         2462, 556, 666, 546, 666, 546, 1242, 554, 1240, 558, 1242, 554, 1242, 558, 1240, 554, 664,
