@@ -12,7 +12,8 @@
     - [ ] プログラムを書く
         - [x] Rust
         - [ ] Arduino
-        - [ ] Circuit Python（起動が遅いので使わないことにした）
+        - Circuit Python（起動が遅いので使わないことにした）
+        - [ ] Micro Python
     - [ ] ドキュメントを書く（READMEもちゃんと書く）
 - [ ] キット化
 
